@@ -42,29 +42,42 @@ class Database (private val connection: Connection) {
     }
 
     private fun insertData() {
+        generateTicketsIds()
         try {
-            val statement = connection.createStatement()
-
             val random = Random()
             val maxEventCapacity = 20
             for (id : Int in 1..numberOfEvents) {
                 val name = "Event " + id
                 val capacity = random.nextInt(maxEventCapacity - 1) + 1
-                val insert = "INSERT INTO Event " +
-                        "values ("+id+"," + "'" + name + "'" + "," + capacity + ");"
+                val insert = "INSERT INTO Event (id,name,capacity) values (?,?,?);"
 
-                statement.executeUpdate(insert)
+                val statament = connection.prepareStatement(insert)
+                statament.setInt(1,id)
+                statament.setString(2,name)
+                statament.setInt(3,capacity)
+
+                statament.executeUpdate()
+                statament.closeOnCompletion()
+
                 connection.commit()
             }
 
-            for (eventId : Int in 1..numberOfEvents) {
-                for (ticketId: Int in 1..numberOfTickets) {
-                    val insert = "INSERT INTO Ticket " +
-                            "values ("+ticketId+"," + true + "," + eventId + ");"
-                    statement.executeUpdate(insert)
+            for ((eventId, ticketsIds) in ticketsIdsPerEvent) {
+                for (ticketId in ticketsIds) {
+                    val insert = "INSERT INTO TICKET (id,available,event) values (?,?,?);"
+
+                    val statament = connection.prepareStatement(insert)
+                    statament.setInt(1, ticketId)
+                    statament.setBoolean(2, true)
+                    statament.setInt(3, eventId)
+
+                    statament.executeUpdate()
+                    statament.closeOnCompletion()
+
                     connection.commit()
                 }
             }
+
         } catch (e: Exception) {
             System.err.println(e.javaClass.name + ": " + e.message)
             throw e

@@ -26,6 +26,4 @@ fun disconnect(connection : Connection){
         System.err.println(e.javaClass.name + ": " + e.message)
         System.exit(0)
     }
-
-    println("Operation done successfully")
 }
