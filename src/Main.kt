@@ -1,11 +1,8 @@
 fun main(args: Array<String>) {
     val database = Database(getConnection()!!)
+    database.create()
 
-    database.start()
+    val usage = Usage()
+    usage.buyTickets()
 
-//    val usage = Usage()
-
-//    usage.buyTickets()
-
-    database.stop()
 }
