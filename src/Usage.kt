@@ -4,14 +4,23 @@ import kotlin.concurrent.thread
 class Usage() {
     fun buyTickets() {
         try {
-            for (index in 1..numberOfThreads) {
+            for (personNumber in 1..numberOfPeople) {
                 thread(start = true) {
                     val random = Random()
                     val eventId = random.nextInt(2) + 1
                     val ticketsIds = ticketsIdsPerEvent[eventId]
-                    val ticketId = ticketsIds!!.get(random.nextInt(ticketsIds.size))
+                    val ticketId = ticketsIds!![random.nextInt(ticketsIds.size)]
                     val connection = getConnection()
-                    val query = "SELECT * " +
+
+                    val queryPerson = "SELECT * " +
+                            "FROM PERSON " +
+                            "WHERE id = " + ticketId + " " +
+                            "AND event = " + eventId + " " +
+                            "AND available = " + true + " " +
+                            "LIMIT 1 " +
+                            "FOR UPDATE SKIP LOCKED;"
+
+                    val queryTicket = "SELECT * " +
                             "FROM TICKET " +
                             "WHERE id = " + ticketId + " " +
                             "AND event = " + eventId + " " +
@@ -20,7 +29,7 @@ class Usage() {
                             "FOR UPDATE SKIP LOCKED;"
 
                     val queryStatement = connection!!.createStatement()
-                    val tickets = queryStatement.executeQuery(query)
+                    val tickets = queryStatement.executeQuery(queryTicket)
 
                     while (tickets.next()) {
                         val update = "UPDATE TICKET set AVAILABLE = false where ID= ${tickets.getInt("id")} AND EVENT = ${tickets.getInt("event")};"

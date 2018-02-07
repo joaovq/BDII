@@ -10,9 +10,10 @@ class Database (private val connection: Connection) {
 
         createTables()
         insertData()
-        selectTickets()
-        //selectEvents()
-        //selectAreas()
+//        selectTickets()
+//        selectEvents()
+//        selectAreas()
+//        selectPeople()
     }
 
     fun stop(){
@@ -43,15 +44,52 @@ class Database (private val connection: Connection) {
                     " PRICE          INT NOT NULL, " +
                     " PRIMARY KEY(ID)" +
                     ");"
+            val personTable = "CREATE TABLE PERSON " +
+                    " (NAME           TEXT    NOT NULL, " +
+                    " AGE            INT     NOT NULL, " +
+                    " ADDRESS        TEXT    NOT NULL, " +
+                    " PRIMARY KEY(NAME)" +
+                    ");"
+            val paymentTable = "CREATE TABLE PAYMENT " +
+                    "(ID             INT     NOT NULL," +
+                    " AMOUNT         INT     NOT NULL, " +
+                    " DUE_DATE        TEXT    NOT NULL, " +
+                    " PRIMARY KEY(ID)" +
+                    ");"
+            val buyTable = "CREATE TABLE BUY " +
+                    "(ID             INT     NOT NULL," +
+                    " PERSON         TEXT    NOT NULL REFERENCES PERSON (NAME), " +
+                    " TICKET         INT     NOT NULL REFERENCES TICKET (ID), " +
+                    " PAYMENT        INT     NOT NULL REFERENCES PAYMENT (ID), " +
+                    " PRIMARY KEY(ID)," +
+                    " UNIQUE(PERSON, TICKET)" +
+                    ");"
 
             statement.executeUpdate(eventTable)
             statement.executeUpdate(areaTable)
             statement.executeUpdate(ticketTable)
+            statement.executeUpdate(personTable)
+            statement.executeUpdate(paymentTable)
+            statement.executeUpdate(buyTable)
 
             connection.commit()
         } catch (e: Exception) {
             System.err.println(e.javaClass.name + ": " + e.message)
             throw e
+        }
+    }
+
+    private fun dropTables() {
+        val tables = listOf("Person","Ticket","Area", "Event")
+        for(table in tables) {
+            val statement = connection.createStatement()
+            try {
+                val sqlDrop = "DROP TABLE $table"
+                statement.executeUpdate(sqlDrop)
+            } catch (e: PSQLException) {
+                statement.close()
+            }
+            connection.commit()
         }
     }
 
@@ -128,6 +166,26 @@ class Database (private val connection: Connection) {
 
                     ticketsIds.add(ticketId)
                 }
+            }
+
+            val maxAge = 75
+            val minAge = 18
+            for (personNumber in 1..numberOfPeople) {
+                val name = "Person $personNumber"
+                val age = random.nextInt(maxAge - minAge) + minAge
+                val address = "Address $name"
+
+                val insert = "INSERT INTO PERSON (name, age, address) values (?,?,?);"
+
+                val statament = connection.prepareStatement(insert)
+                statament.setString(1,name)
+                statament.setInt(2, age)
+                statament.setString(3, address)
+
+                statament.executeUpdate()
+                statament.closeOnCompletion()
+
+                connection.commit()
             }
         } catch (e: Exception) {
             System.err.println(e.javaClass.name + ": " + e.message)
@@ -219,17 +277,29 @@ class Database (private val connection: Connection) {
         }
     }
 
-    private fun dropTables() {
-        val tables = listOf("Ticket","Area", "Event")
-        for(table in tables) {
+    private fun selectPeople() {
+        try {
+            val query = "SELECT * " +
+                    "FROM PERSON;"
+
             val statement = connection.createStatement()
-            try {
-                val sqlDrop = "DROP TABLE $table"
-                statement.executeUpdate(sqlDrop)
-            } catch (e: PSQLException) {
-                statement.close()
+            val events = statement!!.executeQuery(query)
+
+            while (events.next()) {
+                val name = events.getString("name")
+                val age = events.getInt("age")
+                val address = events.getString("address")
+
+                println("NAME = $name")
+                println("AGE = $age")
+                println("ADDRESS = $address")
             }
-            connection.commit()
+
+            events.close()
+            statement.closeOnCompletion()
+        } catch (e: Exception) {
+            System.err.println(e.javaClass.name + ": " + e.message)
+            System.exit(0)
         }
     }
 }

@@ -1,6 +1,6 @@
 val numberOfEvents = 3
 val maxNumberOfAreasPerEvent = 5
-val numberOfThreads = 100
+val numberOfPeople = 100
 val maxAreaCapacity = 100
 val maxNumberOfTicketsPerArea = 50
 val maxPriceOfTicketPerArea = 25
