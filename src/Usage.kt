@@ -2,8 +2,6 @@ import java.util.*
 import kotlin.concurrent.thread
 
 class Usage {
-
-
     fun buyTickets() {
         try {
             for (personNumber in 1..numberOfPeople) {

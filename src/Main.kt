@@ -5,4 +5,7 @@ fun main(args: Array<String>) {
     val usage = Usage()
     usage.buyTickets()
 
+    database.showTable("Buy")
+    database.destroy()
+
 }
