@@ -33,31 +33,25 @@ class Database (private val connection: Connection) {
                     ");"
             val personTable = "CREATE TABLE PERSON " +
                     " (NAME           TEXT    NOT NULL, " +
-                    " AGE            INT     NOT NULL, " +
-                    " ADDRESS        TEXT    NOT NULL, " +
-                    " PRIMARY KEY(NAME)" +
+                    " ID              INT     NOT NULL, " +
+                    " AGE             INT     NOT NULL, " +
+                    " ADDRESS         TEXT    NOT NULL, " +
+                    " GENRE           TEXT, " +
+                    " PRIMARY KEY(ID)" +
                     ");"
             val paymentTable = "CREATE TABLE PAYMENT " +
                     "(ID             INT     NOT NULL," +
+                    " PERSON_ID      INT     NOT NULL REFERENCES PERSON (ID) ON DELETE CASCADE, " +
+                    " TICKET_ID      INT     NOT NULL REFERENCES TICKET (ID) ON DELETE CASCADE, " +
                     " AMOUNT         INT     NOT NULL, " +
                     " DATE           DATE    NOT NULL, " +
-                    " BUY            INT     NOT NULL REFERENCES BUY (ID) ON DELETE CASCADE, " +
                     " PRIMARY KEY(ID)" +
-                    ");"
-            val buyTable = "CREATE TABLE BUY " +
-                    "(ID             INT     NOT NULL," +
-                    " PERSON         TEXT    NOT NULL REFERENCES PERSON (NAME) ON DELETE CASCADE, " +
-                    " TICKET         INT     NOT NULL REFERENCES TICKET (ID) ON DELETE CASCADE, " +
-                    " DUE_DATE       DATE    NOT NULL, " +
-                    " PRIMARY KEY(ID)," +
-                    " UNIQUE(PERSON, TICKET)" +
                     ");"
 
             statement.executeUpdate(eventTable)
             statement.executeUpdate(areaTable)
             statement.executeUpdate(ticketTable)
             statement.executeUpdate(personTable)
-            statement.executeUpdate(buyTable)
             statement.executeUpdate(paymentTable)
 
             connection.commit()
@@ -113,9 +107,9 @@ class Database (private val connection: Connection) {
                     val name = "Area $areaNumber"
                     val capacity = random.nextInt(maxAreaCapacity - 1) + 1
 
-                    val insert = "INSERT INTO AREA (id, name, capacity, event) values (?,?,?,?);"
+                    val insertArea = "INSERT INTO AREA (id, name, capacity, event) values (?,?,?,?);"
 
-                    val areaStatement = connection.prepareStatement(insert)
+                    val areaStatement = connection.prepareStatement(insertArea)
                     areaStatement.setInt(1,areaId)
                     areaStatement.setString(2,name)
                     areaStatement.setInt(3,capacity)
@@ -162,12 +156,15 @@ class Database (private val connection: Connection) {
                 val age = random.nextInt(maxAge - minAge) + minAge
                 val address = "Address $name"
 
-                val insert = "INSERT INTO PERSON (name, age, address) values (?,?,?);"
+                val insert = "INSERT INTO PERSON (name, id, age, address, genre) values (?,?,?,?,?);"
+                val genre = listOf("Masculine","Feminine")
 
                 val statament = connection.prepareStatement(insert)
                 statament.setString(1,name)
-                statament.setInt(2, age)
-                statament.setString(3, address)
+                statament.setInt(2,personNumber)
+                statament.setInt(3, age)
+                statament.setString(4, address)
+                statament.setString(5, genre[random.nextInt(genre.size)])
 
                 statament.executeUpdate()
                 statament.closeOnCompletion()
@@ -180,26 +177,27 @@ class Database (private val connection: Connection) {
         }
     }
 
-    private fun insertBuy(person: Person, ticket: Ticket) {
-        val insert = "INSERT INTO BUY (id, person, ticket, due_date) values (?,?,?,?);"
+    private fun insertPayment(person: Person, ticket: Ticket) {
+        try {
+            val insert = "INSERT INTO PAYMENT (id, person_id, ticket_id, amount, date) values (?,?,?,?,?);"
 
-        val calendar = Calendar.getInstance()
-        calendar.add(Calendar.DAY_OF_MONTH,2)
+            val date = Date()
 
-        val dueDate = calendar.time
+            val statement = connection.prepareStatement(insert)
+            statement.setInt(1, paymentId++)
+            statement.setInt(2, person.id)
+            statement.setInt(3, ticket.id)
+            statement.setInt(4, ticket.price)
+            statement.setDate(5, java.sql.Date(date.time))
 
-        println(ticket.id)
+            statement.execute()
+            statement.closeOnCompletion()
 
-        val statement = connection.prepareStatement(insert)
-        statement.setInt(1, random.nextInt(100000))
-        statement.setString(2, person.name)
-        statement.setInt(3, ticket.id)
-        statement.setDate(4, java.sql.Date(dueDate.time))
-
-        statement.execute(insert)
-        statement.closeOnCompletion()
-
-        connection.commit()
+            connection.commit()
+        } catch (e : Exception) {
+            e.printStackTrace()
+            throw e
+        }
 
     }
 
@@ -215,19 +213,24 @@ class Database (private val connection: Connection) {
     }
 
     fun updateTicket(person : Person, ticket: Ticket) {
-        val update = "UPDATE TICKET set AVAILABLE = false where ID= ${ticket.id} AND AREA = ${ticket.area};"
+        try {
+            val update = "UPDATE TICKET set AVAILABLE = false where ID= ${ticket.id} AND AREA = ${ticket.area};"
 
-        val updateStatement = connection.createStatement()
-        updateStatement!!.executeUpdate(update)
-        updateStatement.closeOnCompletion()
+            val updateStatement = connection.createStatement()
+            updateStatement.executeUpdate(update)
+            updateStatement.closeOnCompletion()
 
-        insertBuy(person,ticket)
+            insertPayment(person,ticket)
+        } catch (e : Exception) {
+            e.printStackTrace()
+            throw e
+        }
     }
 
     fun getTicket(areaId : Int): Ticket? {
         var ticket : Ticket? = null
         try {
-            var available = true
+            val available = true
             val query = "SELECT * " +
                     "FROM TICKET " +
                     "WHERE area = $areaId " +
@@ -309,20 +312,26 @@ class Database (private val connection: Connection) {
         return areas
     }
 
-    fun getPerson(name: String): Person? {
-        var person : Person? = null
+    fun getPeople(name : String = ""): ArrayList<Person> {
+        val persons = ArrayList<Person>()
         try {
-            val query = "SELECT * FROM PERSON WHERE NAME = '$name';"
+            val query : String =
+            if(name.isEmpty())
+                "SELECT * FROM PERSON;"
+            else
+                "SELECT * FROM PERSON WHERE NAME = '$name';"
 
             val statement = connection.createStatement()
             val resultSet = statement!!.executeQuery(query)
 
             while (resultSet.next()) {
                 val name = resultSet.getString("name")
+                val id = resultSet.getInt("id")
                 val age = resultSet.getInt("age")
                 val address = resultSet.getString("address")
+                val genre = resultSet.getString("genre")
 
-                person = Person(name,age,address)
+                persons.add(Person(name,id,age,address, genre))
             }
 
             resultSet.close()
@@ -331,39 +340,48 @@ class Database (private val connection: Connection) {
             System.err.println(e.javaClass.name + ": " + e.message)
             throw e
         }
-        return person
+
+        return persons
     }
 
     fun showTable(table : String) {
         when(table) {
-            "Buy" -> {
-                val buys = getBuys()
+            "Payment" -> {
+                val buys = getPayments()
                 for(buy in buys) {
-                    println(buy.person)
-                    println(buy.ticket)
-                    println(buy.isPaid)
-                    println(buy.due_date)
+                    println("Person ID  ${buy.personId}")
+                    println("Ticket ID ${buy.ticketId}")
+                    println("Amount ${buy.amount}")
+                    println("Date ${buy.date}")
+                    println()
+                }
+            }
+            "Person" -> {
+                val people = getPeople()
+                for(person in people) {
+                    println(person.name)
+                    println()
                 }
             }
         }
     }
 
-    private fun getBuys(): ArrayList<Buy> {
-        val buys : ArrayList<Buy> = ArrayList()
+    private fun getPayments(): ArrayList<Payment> {
+        val buys : ArrayList<Payment> = ArrayList()
         try {
-            val query = "SELECT * FROM BUY;"
+            val query = "SELECT * FROM PAYMENT;"
 
             val statement = connection.createStatement()
             val resultSet = statement!!.executeQuery(query)
 
             while (resultSet.next()) {
                 val id = resultSet.getInt("id")
-                val person = resultSet.getInt("person")
-                val ticket = resultSet.getInt("ticket")
-                val isPaid = resultSet.getBoolean("is_paid")
-                val dueDate = resultSet.getDate("due_date")
+                val person = resultSet.getInt("person_id")
+                val ticket = resultSet.getInt("ticket_id")
+                val amount = resultSet.getInt("amount")
+                val date = resultSet.getDate("date")
 
-                buys.add(Buy(id,person,ticket,isPaid,dueDate))
+                buys.add(Payment(id,person,ticket,amount,date))
             }
 
             resultSet.close()
