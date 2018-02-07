@@ -3,9 +3,9 @@ fun main(args: Array<String>) {
 
     database.start()
 
-    val usage = Usage()
+//    val usage = Usage()
 
-    usage.buyTickets()
+//    usage.buyTickets()
 
     database.stop()
 }
