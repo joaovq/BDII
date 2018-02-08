@@ -4,8 +4,10 @@ fun main(args: Array<String>) {
 
     println("Number of available tickets: ${database.getNumberOfAvailableTickets()}")
 
-    val usage = Usage()
-    usage.sellTickets()
+    sellTickets()
+
+    //database.countNumberOfMen()
+    database.numberOfTicketSoldToSomeone("89")
 
     println("Number of available tickets: ${database.getNumberOfAvailableTickets()}")
 

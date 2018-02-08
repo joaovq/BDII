@@ -1,5 +1,6 @@
 import org.postgresql.util.PSQLException
 import java.sql.Connection
+import java.sql.ResultSet
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.concurrent.thread
@@ -383,6 +384,30 @@ class Database (private val connection: Connection) {
         }
 
         return persons
+    }
+
+    fun countGenre(genre : String) {
+        val query = "SELECT COUNT(*) from person join event on person.genre = $genre where event.id=3;"
+
+        val statement = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)
+        val resultSet = statement.executeQuery()
+
+        val rowCount = if (resultSet.last()) resultSet.row else 0
+
+        println(rowCount)
+    }
+
+    fun numberOfTicketSoldToSomeone (personId : String) {
+        val query = "select count(*) " +
+                "from Payment " +
+                "where payment.person_id = $personId;"
+
+        val statement = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)
+        val resultSet = statement.executeQuery()
+
+        val rowCount = if (resultSet.last()) resultSet.row else 0
+
+        println("Number of tickets sold to $personId: $rowCount")
     }
 
     fun showTable(table : String) {

@@ -1,9 +1,9 @@
 import java.util.*
 import kotlin.concurrent.thread
 
-class Usage {
-    fun sellTickets() {
-        try {
+fun sellTickets() {
+    try {
+        for (buyTrying in 1..numberOfBuyTryingPerPerson) {
             for (personNumber in 1..numberOfPeople) {
                 thread(start = true) {
                     try {
@@ -25,9 +25,9 @@ class Usage {
                     }
                 }
             }
-        } catch (e: Exception) {
-            System.err.println(e.javaClass.name + ": " + e.message)
-            System.exit(0)
         }
+    } catch (e: Exception) {
+        System.err.println(e.javaClass.name + ": " + e.message)
+        System.exit(0)
     }
 }
