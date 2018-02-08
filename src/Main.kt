@@ -2,14 +2,16 @@ fun main(args: Array<String>) {
     val database = Database(getConnection()!!)
     database.create()
 
-    println("Number of available tickets: ${database.getNumberOfAvailableTickets()}")
-
     sellTickets()
 
     //database.countNumberOfMen()
-    database.numberOfTicketSoldToSomeone("89")
-
-    println("Number of available tickets: ${database.getNumberOfAvailableTickets()}")
+    database.numberOfTicketSoldToSomeone(89)
+    database.areaCapacity(2)
+    database.eventsLocation(2)
+    database.mostExpensiveTicketOfEvent(1)
+    database.sumOfTicketsSoldInEvent(1)
+    database.numberOfAreasOfEvent(2)
+    database.mostExpensiveTicketSold()
 
     database.destroy()
 

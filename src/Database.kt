@@ -3,7 +3,6 @@ import java.sql.Connection
 import java.sql.ResultSet
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.concurrent.thread
 
 
 class Database (private val connection: Connection) {
@@ -280,7 +279,7 @@ class Database (private val connection: Connection) {
         return ticket
     }
 
-    fun getNumberOfAvailableTickets() : Int {
+    fun getNumberOfAvailableTickets() {
         var numberOfFoundTickets = 1
         try {
             val query = "SELECT * " +
@@ -298,7 +297,7 @@ class Database (private val connection: Connection) {
             e.printStackTrace()
             throw e
         }
-        return numberOfFoundTickets
+        println("Number of available tickets: $numberOfFoundTickets")
     }
 
     fun getEvents(): ArrayList<Event> {
@@ -395,9 +394,12 @@ class Database (private val connection: Connection) {
         val rowCount = if (resultSet.last()) resultSet.row else 0
 
         println(rowCount)
+
+        statement.close()
+        resultSet.close()
     }
 
-    fun numberOfTicketSoldToSomeone (personId : String) {
+    fun numberOfTicketSoldToSomeone (personId : Int) {
         val query = "select count(*) " +
                 "from Payment " +
                 "where payment.person_id = $personId;"
@@ -408,6 +410,118 @@ class Database (private val connection: Connection) {
         val rowCount = if (resultSet.last()) resultSet.row else 0
 
         println("Number of tickets sold to $personId: $rowCount")
+
+        statement.close()
+        resultSet.close()
+    }
+
+    fun areaCapacity (eventId: Int) {
+        val query = "select name,capacity " +
+                "from area " +
+                "where area.event = $eventId;"
+
+        val statement = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)
+        val resultSet = statement.executeQuery()
+
+        var capacity = 0
+        var name = "Unknown"
+        while(resultSet.next()) {
+            name = resultSet.getString("name")
+            capacity = resultSet.getInt("capacity")
+        }
+
+        println("Capacity of area $name: $capacity")
+
+        statement.close()
+        resultSet.close()
+    }
+
+    fun eventsLocation (eventId: Int) {
+        val query = "select location " +
+                "from event " +
+                "where event.id <= $eventId;"
+
+        val statement = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)
+        val resultSet = statement.executeQuery()
+
+        val locations = ArrayList<String>()
+        while(resultSet.next())
+            locations.add(resultSet.getString("location"))
+
+        println("Locations of events: $locations")
+
+        statement.close()
+        resultSet.close()
+    }
+
+    fun mostExpensiveTicketOfEvent (eventId: Int ) {
+        val query = "select max(ticket.price) " +
+                "from ticket join area on ticket.area = area.id " +
+                "where area.event = $eventId;"
+
+        val statement = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)
+        val resultSet = statement.executeQuery()
+
+        var mostExpensiveTicket = 0
+        while(resultSet.next())
+            mostExpensiveTicket = resultSet.getInt(1)
+
+        println("Most expensive ticket of event $eventId: $mostExpensiveTicket")
+
+        statement.close()
+        resultSet.close()
+    }
+
+    fun sumOfTicketsSoldInEvent(eventId: Int) {
+        val query = "select sum (ticket.price) " +
+                "from ticket join area on ticket.area = area.id " +
+                "where area.event = $eventId and ticket.available = false"
+
+        val statement = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)
+        val resultSet = statement.executeQuery()
+
+        var sumOfSoldTickets = 0
+        while(resultSet.next())
+            sumOfSoldTickets = resultSet.getInt(1)
+
+        println("Sum of tickets sold on event $eventId: $sumOfSoldTickets")
+
+        statement.close()
+        resultSet.close()
+    }
+
+    fun numberOfAreasOfEvent(eventId : Int) {
+        val query = "select count (area.id)" +
+                    "from area join event on area.event = event.id " +
+                    "where event = $eventId"
+
+        val statement = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)
+        val resultSet = statement.executeQuery()
+
+        val rowCount = if (resultSet.last()) resultSet.row else 0
+
+        println("Number of Areas of event $eventId: $rowCount")
+
+        statement.close()
+        resultSet.close()
+    }
+
+
+    fun mostExpensiveTicketSold () {
+        val query = "select max (amount), ticket_id " +
+                    "from payment join ticket on payment.ticket_id = ticket.id " +
+                    "where ticket.available = false " +
+                    "group by ticket_id"
+
+        val statement = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)
+        val resultSet = statement.executeQuery()
+
+        var ticketId = "Unknown"
+        while (resultSet.next()){
+            ticketId = resultSet.getString("ticket_id")
+        }
+
+        println("Most Expensive Ticket Sold $ticketId")
     }
 
     fun showTable(table : String) {

@@ -3,11 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="a814c21a-9ad6-4fad-b91c-86d8c61bd065" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/out/production/Eventos - Banco de Dados II/Usage.class" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/out/production/Eventos - Banco de Dados II/Database.class" afterPath="$PROJECT_DIR$/out/production/Eventos - Banco de Dados II/Database.class" />
+      <change beforePath="$PROJECT_DIR$/out/production/Eventos - Banco de Dados II/META-INF/Eventos - Banco de Dados II.kotlin_module" afterPath="$PROJECT_DIR$/out/production/Eventos - Banco de Dados II/META-INF/Eventos - Banco de Dados II.kotlin_module" />
+      <change beforePath="$PROJECT_DIR$/out/production/Eventos - Banco de Dados II/MainKt.class" afterPath="$PROJECT_DIR$/out/production/Eventos - Banco de Dados II/MainKt.class" />
+      <change beforePath="$PROJECT_DIR$/out/production/Eventos - Banco de Dados II/UtilsKt.class" afterPath="$PROJECT_DIR$/out/production/Eventos - Banco de Dados II/UtilsKt.class" />
       <change beforePath="$PROJECT_DIR$/src/Database.kt" afterPath="$PROJECT_DIR$/src/Database.kt" />
       <change beforePath="$PROJECT_DIR$/src/Main.kt" afterPath="$PROJECT_DIR$/src/Main.kt" />
-      <change beforePath="$PROJECT_DIR$/src/Usage.kt" afterPath="$PROJECT_DIR$/src/Usage.kt" />
-      <change beforePath="$PROJECT_DIR$/src/Utils.kt" afterPath="$PROJECT_DIR$/src/Utils.kt" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -22,18 +23,16 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Database.kt" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Database.kt" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Database.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="125">
-              <caret line="399" column="8" lean-forward="false" selection-start-line="399" selection-start-column="8" selection-end-line="399" selection-end-column="8" />
+            <state relative-caret-position="331">
+              <caret line="523" column="53" lean-forward="false" selection-start-line="523" selection-start-column="53" selection-end-line="523" selection-end-column="53" />
               <folding>
-                <element signature="e#0#180#0" expanded="true" />
-                <element signature="n#!!block;n#createTables#0;n#!!block;n#Database#0" expanded="false" />
+                <element signature="e#0#148#0" expanded="true" />
                 <element signature="n#!!block;n#dropTables#0;n#!!block;n#Database#0" expanded="false" />
                 <element signature="n#!!block;n#insertInitialData#0;n#!!block;n#Database#0" expanded="false" />
                 <element signature="n#!!block;n#shouldNotPay#0;n#!!block;n#Database#0" expanded="false" />
-                <element signature="n#!!block;n#insertPayment#0;n#!!block;n#Database#0" expanded="false" />
                 <element signature="n#!!block;n#create#0;n#!!block;n#Database#0" expanded="false" />
                 <element signature="n#!!block;n#destroy#0;n#!!block;n#Database#0" expanded="false" />
                 <element signature="n#!!block;n#updateTicket#0;n#!!block;n#Database#0" expanded="false" />
@@ -42,6 +41,11 @@
                 <element signature="n#!!block;n#getEvents#0;n#!!block;n#Database#0" expanded="false" />
                 <element signature="n#!!block;n#getAreas#0;n#!!block;n#Database#0" expanded="false" />
                 <element signature="n#!!block;n#getPeople#0;n#!!block;n#Database#0" expanded="false" />
+                <element signature="n#!!block;n#countGenre#0;n#!!block;n#Database#0" expanded="false" />
+                <element signature="n#!!block;n#numberOfTicketSoldToSomeone#0;n#!!block;n#Database#0" expanded="false" />
+                <element signature="n#!!block;n#areaCapacity#0;n#!!block;n#Database#0" expanded="false" />
+                <element signature="n#!!block;n#eventsLocation#0;n#!!block;n#Database#0" expanded="false" />
+                <element signature="n#!!block;n#sumOfTicketsSoldInEvent#0;n#!!block;n#Database#0" expanded="false" />
                 <element signature="n#!!block;n#showTable#0;n#!!block;n#Database#0" expanded="false" />
                 <element signature="n#!!block;n#getPayments#0;n#!!block;n#Database#0" expanded="false" />
               </folding>
@@ -49,11 +53,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Main.kt" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Connection.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Connection.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Main.kt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Main.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="41" lean-forward="false" selection-start-line="11" selection-start-column="41" selection-end-line="11" selection-end-column="41" />
+            <state relative-caret-position="195">
+              <caret line="13" column="38" lean-forward="false" selection-start-line="13" selection-start-column="38" selection-end-line="13" selection-end-column="38" />
               <folding />
             </state>
           </provider>
@@ -116,10 +130,10 @@
         <option value="$PROJECT_DIR$/src/ConnectionFactory.kt" />
         <option value="$PROJECT_DIR$/src/Connection.kt" />
         <option value="$PROJECT_DIR$/src/Models.kt" />
-        <option value="$PROJECT_DIR$/src/Database.kt" />
-        <option value="$PROJECT_DIR$/src/Main.kt" />
         <option value="$PROJECT_DIR$/src/Utils.kt" />
         <option value="$PROJECT_DIR$/src/Usage.kt" />
+        <option value="$PROJECT_DIR$/src/Main.kt" />
+        <option value="$PROJECT_DIR$/src/Database.kt" />
       </list>
     </option>
   </component>
@@ -395,12 +409,18 @@
       <option name="project" value="LOCAL" />
       <updated>1518050793194</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="#refactor: change the sell ticket function">
+      <created>1518052115722</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1518052115722</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="1394" y="50" width="1368" height="738" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -410,7 +430,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32861635" sideWeight="0.50292826" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32861635" sideWeight="0.49707174" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32861635" sideWeight="0.49707174" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -445,25 +465,20 @@
     <MESSAGE value="#feat: add payment method" />
     <MESSAGE value="#feat: finish payment method" />
     <MESSAGE value="#feat: really finish payment" />
-    <option name="LAST_COMMIT_MESSAGE" value="#feat: really finish payment" />
+    <MESSAGE value="#refactor: change the sell ticket function" />
+    <option name="LAST_COMMIT_MESSAGE" value="#refactor: change the sell ticket function" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/src/Database.kt</url>
-          <line>214</line>
-          <properties />
-          <option name="timeStamp" value="78" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/Database.kt</url>
-          <line>233</line>
+          <line>232</line>
           <properties />
           <option name="timeStamp" value="82" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="83" />
+      <option name="time" value="84" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -698,39 +713,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Connection.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="21" column="4" lean-forward="false" selection-start-line="21" selection-start-column="4" selection-end-line="21" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Database.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="399" column="8" lean-forward="false" selection-start-line="399" selection-start-column="8" selection-end-line="399" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#180#0" expanded="true" />
-            <element signature="n#!!block;n#createTables#0;n#!!block;n#Database#0" expanded="false" />
-            <element signature="n#!!block;n#dropTables#0;n#!!block;n#Database#0" expanded="false" />
-            <element signature="n#!!block;n#insertInitialData#0;n#!!block;n#Database#0" expanded="false" />
-            <element signature="n#!!block;n#shouldNotPay#0;n#!!block;n#Database#0" expanded="false" />
-            <element signature="n#!!block;n#insertPayment#0;n#!!block;n#Database#0" expanded="false" />
-            <element signature="n#!!block;n#create#0;n#!!block;n#Database#0" expanded="false" />
-            <element signature="n#!!block;n#destroy#0;n#!!block;n#Database#0" expanded="false" />
-            <element signature="n#!!block;n#updateTicket#0;n#!!block;n#Database#0" expanded="false" />
-            <element signature="n#!!block;n#getTicket#0;n#!!block;n#Database#0" expanded="false" />
-            <element signature="n#!!block;n#getNumberOfAvailableTickets#0;n#!!block;n#Database#0" expanded="false" />
-            <element signature="n#!!block;n#getEvents#0;n#!!block;n#Database#0" expanded="false" />
-            <element signature="n#!!block;n#getAreas#0;n#!!block;n#Database#0" expanded="false" />
-            <element signature="n#!!block;n#getPeople#0;n#!!block;n#Database#0" expanded="false" />
-            <element signature="n#!!block;n#showTable#0;n#!!block;n#Database#0" expanded="false" />
-            <element signature="n#!!block;n#getPayments#0;n#!!block;n#Database#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Utils.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
@@ -747,11 +729,47 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Connection.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="41" lean-forward="false" selection-start-line="11" selection-start-column="41" selection-end-line="11" selection-end-column="41" />
+        <state relative-caret-position="195">
+          <caret line="13" column="38" lean-forward="false" selection-start-line="13" selection-start-column="38" selection-end-line="13" selection-end-column="38" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Database.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="331">
+          <caret line="523" column="53" lean-forward="false" selection-start-line="523" selection-start-column="53" selection-end-line="523" selection-end-column="53" />
+          <folding>
+            <element signature="e#0#148#0" expanded="true" />
+            <element signature="n#!!block;n#dropTables#0;n#!!block;n#Database#0" expanded="false" />
+            <element signature="n#!!block;n#insertInitialData#0;n#!!block;n#Database#0" expanded="false" />
+            <element signature="n#!!block;n#shouldNotPay#0;n#!!block;n#Database#0" expanded="false" />
+            <element signature="n#!!block;n#create#0;n#!!block;n#Database#0" expanded="false" />
+            <element signature="n#!!block;n#destroy#0;n#!!block;n#Database#0" expanded="false" />
+            <element signature="n#!!block;n#updateTicket#0;n#!!block;n#Database#0" expanded="false" />
+            <element signature="n#!!block;n#getTicket#0;n#!!block;n#Database#0" expanded="false" />
+            <element signature="n#!!block;n#getNumberOfAvailableTickets#0;n#!!block;n#Database#0" expanded="false" />
+            <element signature="n#!!block;n#getEvents#0;n#!!block;n#Database#0" expanded="false" />
+            <element signature="n#!!block;n#getAreas#0;n#!!block;n#Database#0" expanded="false" />
+            <element signature="n#!!block;n#getPeople#0;n#!!block;n#Database#0" expanded="false" />
+            <element signature="n#!!block;n#countGenre#0;n#!!block;n#Database#0" expanded="false" />
+            <element signature="n#!!block;n#numberOfTicketSoldToSomeone#0;n#!!block;n#Database#0" expanded="false" />
+            <element signature="n#!!block;n#areaCapacity#0;n#!!block;n#Database#0" expanded="false" />
+            <element signature="n#!!block;n#eventsLocation#0;n#!!block;n#Database#0" expanded="false" />
+            <element signature="n#!!block;n#sumOfTicketsSoldInEvent#0;n#!!block;n#Database#0" expanded="false" />
+            <element signature="n#!!block;n#showTable#0;n#!!block;n#Database#0" expanded="false" />
+            <element signature="n#!!block;n#getPayments#0;n#!!block;n#Database#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
