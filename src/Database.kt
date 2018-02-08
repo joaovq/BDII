@@ -177,23 +177,38 @@ class Database (private val connection: Connection) {
         }
     }
 
+    private fun shouldNotPay() : Boolean {
+        val randomNumber = random.nextInt(50000)
+        val minOfRange = 20000
+        val maxOfRange = 23000
+        return randomNumber in minOfRange..maxOfRange
+    }
+
     private fun insertPayment(person: Person, ticket: Ticket) {
         try {
-            val insert = "INSERT INTO PAYMENT (id, person_id, ticket_id, amount, date) values (?,?,?,?,?);"
+            var statement = ticketsOpenTransactions[ticket.id]!!
+            if(shouldNotPay())
+                statement.cancel()
+            else {
+                val insert = "INSERT INTO PAYMENT (id, person_id, ticket_id, amount, date) values (?,?,?,?,?);"
 
-            val date = Date()
+                val date = Date()
 
-            val statement = connection.prepareStatement(insert)
-            statement.setInt(1, paymentId++)
-            statement.setInt(2, person.id)
-            statement.setInt(3, ticket.id)
-            statement.setInt(4, ticket.price)
-            statement.setDate(5, java.sql.Date(date.time))
+                statement.close()
 
-            statement.execute()
-            statement.closeOnCompletion()
+                statement = connection.prepareStatement(insert)
+                statement.setInt(1, random.nextInt(100000))
+                statement.setInt(2, person.id)
+                statement.setInt(3, ticket.id)
+                statement.setInt(4, ticket.price)
+                statement.setDate(5, java.sql.Date(date.time))
 
-            connection.commit()
+                statement.execute()
+                statement.closeOnCompletion()
+
+                connection.commit()
+            }
+            ticketsOpenTransactions.remove(ticket.id)
         } catch (e : Exception) {
             e.printStackTrace()
             throw e
@@ -220,6 +235,8 @@ class Database (private val connection: Connection) {
             updateStatement.executeUpdate(update)
             updateStatement.closeOnCompletion()
 
+            connection.commit()
+
             insertPayment(person,ticket)
         } catch (e : Exception) {
             e.printStackTrace()
@@ -238,8 +255,9 @@ class Database (private val connection: Connection) {
                     "LIMIT 1 " +
                     "FOR UPDATE SKIP LOCKED;"
 
-            val statement = connection.createStatement()
-            val resultSet = statement!!.executeQuery(query)
+            val statement = connection.prepareStatement(query)
+
+            val resultSet = statement!!.executeQuery()
 
             while (resultSet.next()) {
                 val id = resultSet.getInt("id")
@@ -248,15 +266,37 @@ class Database (private val connection: Connection) {
                 val price = resultSet.getInt("price")
 
                 ticket = Ticket(id, available, area, price)
-            }
 
+                if(!ticketsOpenTransactions.containsKey(ticket.id))
+                    ticketsOpenTransactions.put(ticket.id,statement)
+            }
             resultSet.close()
-            statement.closeOnCompletion()
         } catch (e: Exception) {
             System.err.println(e.javaClass.name + ": " + e.message)
             throw e
         }
         return ticket
+    }
+
+    fun getNumberOfAvailableTickets() : Int {
+        var numberOfFoundTickets = 1
+        try {
+            val query = "SELECT * " +
+                    "FROM TICKET " +
+                    "WHERE available = true;"
+
+            val statement = connection.prepareStatement(query)
+
+            val resultSet = statement!!.executeQuery()
+
+            while (resultSet.next())
+                numberOfFoundTickets++
+
+        } catch (e : Exception) {
+            e.printStackTrace()
+            throw e
+        }
+        return numberOfFoundTickets
     }
 
     fun getEvents(): ArrayList<Event> {

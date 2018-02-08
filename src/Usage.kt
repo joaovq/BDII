@@ -2,7 +2,7 @@ import java.util.*
 import kotlin.concurrent.thread
 
 class Usage {
-    fun buyTickets() = try {
+    fun sellTickets() = try {
         for (personNumber in 1..numberOfPeople) {
             thread(start = true) {
                 try {
@@ -16,11 +16,9 @@ class Usage {
 
                     if(ticket != null) {
                         val person = database.getPeople("Person $personNumber")[0]
-
-                        database.updateTicket(person,ticket!!)
-
-                        database.destroy()
+                        database.updateTicket(person,ticket)
                     }
+                    database.destroy()
 
                 } catch (e : Exception) {
                     System.err.println(e.javaClass.name + ": " + e.message)

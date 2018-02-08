@@ -2,10 +2,13 @@ fun main(args: Array<String>) {
     val database = Database(getConnection()!!)
     database.create()
 
-    val usage = Usage()
-    usage.buyTickets()
+    println("Number of available tickets: ${database.getNumberOfAvailableTickets()}")
 
-    database.showTable("Payment")
+    val usage = Usage()
+    usage.sellTickets()
+
+    println("Number of available tickets: ${database.getNumberOfAvailableTickets()}")
+
     database.destroy()
 
 }
